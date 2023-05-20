@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
 using System.Windows.Threading;
+using System.Runtime.CompilerServices;
 
 namespace wpftryout
 {
@@ -22,7 +23,9 @@ namespace wpftryout
         DispatcherTimer timer = new DispatcherTimer();
         int tenthOfSecondsElapsed;
         int matchesFound;
-        
+        string time = "0";
+        string besttime = "0";
+
         private void SetUpGame()
         {
             List<string> animalEmoji = new List<string>()
@@ -39,20 +42,25 @@ namespace wpftryout
             Random rndm = new Random();
             foreach (TextBlock tb in mainGrid.Children.OfType<TextBlock>())
             {
-                if (tb.Name != "timeTextBlock")
+                if (tb.Name != "timeTextBlock" && tb.Name != "scoreTextBox")
                 {
                     tb.Visibility = Visibility.Visible;
+                    //tb.Foreground = new SolidColorBrush(Colors.Transparent);
                     int i = rndm.Next(animalEmoji.Count);
                     string nextEmoji = animalEmoji[i];
                     tb.Text = nextEmoji;
                     animalEmoji.RemoveAt(i);
+
+
+                    //tb.Background = new SolidColorBrush(Colors.Gray);
                 }
                 
             }
             timer.Start();
             tenthOfSecondsElapsed = 0;
             matchesFound = 0;
-            
+            Best_Time();
+
         }
         
         public MainWindow()
@@ -70,32 +78,45 @@ namespace wpftryout
             if (matchesFound == 8)
             {
                 timer.Stop();
+                time = timeTextBlock.Text.Substring(0,3);
                 timeTextBlock.Text = timeTextBlock.Text + " - Play again?";
             }
         }
+        private void Best_Time()
+        {
+            if (double.Parse(time) < double.Parse(besttime) || besttime == "0")
+            {
+                besttime = time;
+            }
+            scoreTextBox.Text = ("Best time:  " + besttime + "s");
+        } 
 
         TextBlock lastTextBoxClicked;
         bool lookingForMatch = false;
 
-        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
             TextBlock currentTextBlock = (TextBlock)sender;
             if (lookingForMatch == false)
             {
-                currentTextBlock.Visibility= Visibility.Hidden;
+                currentTextBlock.Foreground = new SolidColorBrush(Colors.ForestGreen);
                 lastTextBoxClicked = currentTextBlock;
                 lookingForMatch = true;
             }
             else if (lastTextBoxClicked.Text == currentTextBlock.Text)
             {
                 matchesFound++;
-                currentTextBlock.Visibility= Visibility.Hidden;
-                lookingForMatch= false;
+                lookingForMatch = false;
+                currentTextBlock.Foreground = new SolidColorBrush(Colors.Gray);
+                lastTextBoxClicked.Foreground = new SolidColorBrush(Colors.Gray);
             }
             else
             {
-                lastTextBoxClicked.Visibility = Visibility.Visible;
+                currentTextBlock.Foreground = new SolidColorBrush(Colors.ForestGreen);
                 lookingForMatch = false;
+                await Task.Delay(300);
+                currentTextBlock.Foreground = new SolidColorBrush(Colors.Transparent);
+                lastTextBoxClicked.Foreground = new SolidColorBrush(Colors.Transparent);
             }
         }
 
