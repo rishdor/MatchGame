@@ -16,7 +16,7 @@ using System.Threading;
 using System.Windows.Threading;
 using System.Runtime.CompilerServices;
 
-namespace wpftryout
+namespace Matching_game
 {
     public partial class MainWindow : Window
     {
@@ -37,19 +37,45 @@ namespace wpftryout
                 "𓃯", "𓃯",
                 "𓃱", "𓃱",
                 "𓄇", "𓄇",
-                "𓄃", "𓄃"
+                "𓄃", "𓄃",
+                "𓃬", "𓃬",
+                "𓃠", "𓃠",
+                "𓃟", "𓃟",
+                "𓃗", "𓃗",
+                "𓅞", "𓅞",
+                "𓅮", "𓅮"
+
             };
             Random rndm = new Random();
+
+            List<string> animals = new List<string>();
+            for (int i = 0; i < 8; i++)
+            {
+                int index = rndm.Next(animalEmoji.Count);
+                animals.Add(animalEmoji[index]);
+                if (index % 2 == 0)
+                {
+                    animals.Add(animalEmoji[index + 1]);
+                    animalEmoji.RemoveAt(index);
+                    animalEmoji.RemoveAt(index);
+                }
+                else
+                {
+                    animals.Add(animalEmoji[index - 1]);
+                    animalEmoji.RemoveAt(index);
+                    animalEmoji.RemoveAt(index - 1);
+                }
+            }
             foreach (TextBlock tb in mainGrid.Children.OfType<TextBlock>())
             {
                 if (tb.Name != "timeTextBlock" && tb.Name != "scoreTextBox")
                 {
                     tb.Visibility = Visibility.Visible;
-                    //tb.Foreground = new SolidColorBrush(Colors.Transparent);
-                    int i = rndm.Next(animalEmoji.Count);
-                    string nextEmoji = animalEmoji[i];
+                    tb.Foreground = new SolidColorBrush(Colors.Transparent);
+                    int index2 = rndm.Next(animals.Count);
+                    string nextEmoji = animals[index2];
                     tb.Text = nextEmoji;
-                    animalEmoji.RemoveAt(i);
+                    animals.RemoveAt(index2);
 
 
                     //tb.Background = new SolidColorBrush(Colors.Gray);
