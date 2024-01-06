@@ -6,7 +6,8 @@ This is a simple WPF application that implements a memory game with animal emoji
 
 - **Timer**: The game includes a timer that tracks the time elapsed since the start of the game.
 - **Match Tracking**: The application keeps track of the number of matches found by the user.
-- **Game Setup**: At the start of the game, animal emojis are randomly assigned to the TextBlocks in the main grid.
+- **Best Time**: The application keeps track of the best time achieved by the user.
+- **Game Setup**: At the start of the game, animal emojis are randomly assigned to the TextBlocks in the main grid. The number of emojis has been increased for a more challenging game.
 - **Click Handling**: The application handles mouse down events on the TextBlocks and the timer TextBlock.
 
 ## How to Play
@@ -23,5 +24,4 @@ The `MainWindow` class contains the main logic of the game. It includes methods 
 
 ## Future Improvements
 
-- Add different difficulty levels by increasing the number of emojis.
-- Implement a high score system that tracks the fastest times.
+- Add different difficulty levels by increasing or decreasing the number of emojis.
